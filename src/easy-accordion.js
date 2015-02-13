@@ -6,29 +6,34 @@
  * Licensed under the MIT license.
  */
 (function ($) {
+  'use strict';
   // Collection method.
-  $.fn. = function () {
-    return this.each(function (i) {
-      // Do something to each selected element.
-      $(this).html('' + i);
-    });
-  };
+	$.fn.easyAccordion = function (  ) {
+		return this.each(function (i) {
+			$(this).html('' + i);
+			new Accordion( $(this) );
+		});
+	};
 
-  // Static method.
-  $. = function (options) {
-    // Override default options with passed-in options.
-    options = $.extend({}, $..options, options);
-    // Return the name of your plugin plus a punctuation character.
-    return '' + options.punctuation;
-  };
+	var Accordion = function(el, multiple) {
+		this.el = el || {};
+		this.multiple = multiple || false;
 
-  // Static method default options.
-  $..options = {
-    punctuation: '.'
-  };
+		// Evento
+		el.on('click', '.link', this.dropdown);
+	};
 
-  // Custom selector.
-  $.expr[':']. = function (el) {
-    return $(el).text() === 'awesome test markup';
-  };
+	Accordion.prototype.dropdown = function(e) {
+		var $el = $(e.currentTarget),
+			$this = $(this),
+			$next = $this.next();
+
+		$next.slideToggle();
+		$this.parent().toggleClass('open');
+
+		if (!e.currentTarget.multiple) {
+			$el.parent().parent().find('.submenu').not($next).slideUp().parent().removeClass('open');
+		}
+	};
+
 }(jQuery));
